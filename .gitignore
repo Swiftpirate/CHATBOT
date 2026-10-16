@@ -1,4 +1,20 @@
+# Virtual environment
 venv/
+
+# Book PDFs and extracted text (copyrighted)
 data/books/
+data/extracted/
+data/chunks.jsonl
+data/index/
+
+# Secrets
 .env
+
+# Python cache
 __pycache__/
+*.pyc
+
+# Editor and OS files
+.vscode/
+.idea/
+Thumbs.db
