@@ -1,5 +1,7 @@
 import json
+import re
 import time
+from html import escape
 from pathlib import Path
 
 import streamlit as st
@@ -7,13 +9,11 @@ from generate import prepare, stream_tokens, finalize, no_evidence, MODEL
 
 # ---------- settings you can change ----------
 BOT_NAME = "DataSage"
-USER_AVATAR = "🧑‍🎓"
-BOT_AVATAR = "📗"
 EXAMPLES = [
-    "What is overfitting?",
-    "What is PageRank?",
-    "What is gradient descent?",
-    "What is TF-IDF?",
+    ("Explain overfitting", "What is overfitting?"),
+    ("How PageRank works", "What is PageRank?"),
+    ("Gradient descent, simply", "What is gradient descent?"),
+    ("Compare two books", "Do Bishop and ISLR define the bias-variance tradeoff the same way?"),
 ]
 # ---------------------------------------------
 
@@ -31,263 +31,307 @@ def load_books():
         return json.load(f)["books"]
 
 
-def logo(size, gid):
+def logo(size):
     """Vibrant green logo: an open book with a spark (pure SVG, no image file)."""
-    return f"""
-<svg width="{size}" height="{size}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="{gid}" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#5CFF9D"/>
-      <stop offset="0.55" stop-color="#00E676"/>
-      <stop offset="1" stop-color="#00B248"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="18" fill="url(#{gid})"/>
-  <path d="M12 22c6.5-3.2 13-3.2 19.5 1v24c-6.5-4.2-13-4.2-19.5-1z" fill="#06210F"/>
-  <path d="M52 22c-6.5-3.2-13-3.2-19.5 1v24c6.5-4.2 13-4.2 19.5-1z" fill="#06210F" opacity="0.82"/>
-  <path d="M17 29h9M17 34h9M38 29h9M38 34h9" stroke="#5CFF9D" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-  <circle cx="50" cy="12" r="3.2" fill="#FFFFFF"/>
-  <path d="M50 5.5v2.5M50 16v2.5M43.5 12h2.5M54 12h2.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
-</svg>"""
+    return (
+        f'<svg width="{size}" height="{size}" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+        f'<rect width="64" height="64" rx="18" fill="#12C25B"/>'
+        f'<path d="M12 22c6.5-3.2 13-3.2 19.5 1v24c-6.5-4.2-13-4.2-19.5-1z" fill="#FFFFFF"/>'
+        f'<path d="M52 22c-6.5-3.2-13-3.2-19.5 1v24c6.5-4.2 13-4.2 19.5-1z" fill="#FFFFFF" opacity="0.85"/>'
+        f'<path d="M17 29h9M17 34h9M38 29h9M38 34h9" stroke="#12C25B" stroke-width="2" stroke-linecap="round"/>'
+        f'<circle cx="50" cy="12" r="3" fill="#FFFFFF"/>'
+        f"</svg>"
+    )
 
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap');
-
 :root {
-  --green: #00E676;
-  --green-bright: #5CFF9D;
-  --bg: #070C09;
-  --card: #0F1813;
-  --card-2: #13201A;
-  --border: #1D2E25;
-  --text: #E8F5EC;
-  --muted: #8BA596;
+  --bg: #050605;
+  --side: #0B0D0C;
+  --card: #0E110F;
+  --line: #1E2420;
+  --text: #ECF1EE;
+  --muted: #8D9791;
+  --bubble: #171B19;
+  --chip: #212724;
+  --hover: #151916;
+  --active: #1B201D;
+  --brand: #12C25B;
+  --brand-ink: #3DF58A;
+  --font: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 }
-
-html, body, .stApp, [data-testid="stMarkdownContainer"] { font-family: 'Inter', sans-serif; }
 
 .stApp {
   background:
-    radial-gradient(900px 500px at 50% -15%, rgba(0, 230, 118, 0.16), transparent 60%),
-    radial-gradient(600px 400px at 100% 100%, rgba(0, 230, 118, 0.06), transparent 60%),
+    radial-gradient(1100px 520px at 50% -12%, rgba(18, 194, 91, 0.13), transparent 62%),
     var(--bg);
+  color: var(--text);
 }
-
+.stApp p, .stApp li, .stApp label, .stApp textarea, .stApp input,
+.stApp button p, .ds { font-family: var(--font); }
+[data-testid="stHeader"] { background: transparent; }
 #MainMenu, footer { visibility: hidden; }
-
-/* ---------- hero ---------- */
-.hero { display: flex; align-items: center; gap: 18px; margin: 6px 0 6px; }
-.hero svg { filter: drop-shadow(0 0 22px rgba(0, 230, 118, 0.45)); flex-shrink: 0; }
-.hero h1 {
-  font-family: 'Space Grotesk', sans-serif; font-weight: 700;
-  font-size: 2.6rem; line-height: 1; margin: 0; padding: 0;
-  background: linear-gradient(90deg, #5CFF9D, #00E676 45%, #B9F6CA);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.hero p { color: var(--muted); margin: 6px 0 0; font-size: 0.95rem; }
-
-.pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 22px; }
-.pill {
-  font-size: 0.78rem; color: var(--green-bright);
-  background: rgba(0, 230, 118, 0.08); border: 1px solid rgba(0, 230, 118, 0.28);
-  padding: 4px 11px; border-radius: 999px;
+[data-testid="stMainBlockContainer"], .block-container {
+  max-width: 760px; padding-top: 2.5rem; padding-bottom: 8rem;
 }
 
-/* ---------- chat messages ---------- */
-[data-testid="stChatMessage"] {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 18px; padding: 14px 16px; margin-bottom: 12px;
-}
-[data-testid="stChatMessage"]:has([aria-label="Chat message from user"]),
-[data-testid="stChatMessage"]:nth-of-type(odd) { background: var(--card-2); }
+/* ---------- empty state ---------- */
+.welcome { text-align: center; margin: 9vh 0 28px; }
+.welcome svg { margin-bottom: 14px; filter: drop-shadow(0 0 26px rgba(18, 194, 91, 0.45)); }
+.welcome-h { font-family: var(--font); font-size: 1.9rem; font-weight: 600; letter-spacing: -0.02em; color: var(--text); }
+.welcome-p { font-family: var(--font); color: var(--muted); font-size: 1rem; margin-top: 6px; }
 
-/* ---------- chat input ---------- */
+/* ---------- messages ---------- */
+.msg-user { display: flex; justify-content: flex-end; margin: 22px 0 10px; }
+.msg-user .bubble {
+  max-width: 78%; background: var(--bubble); border-radius: 20px;
+  padding: 10px 16px; font-family: var(--font); font-size: 1rem;
+  line-height: 1.55; color: var(--text); white-space: pre-wrap;
+}
+.msg-bot { display: flex; gap: 14px; align-items: flex-start; margin: 4px 0 18px; }
+.msg-bot .avatar { flex: 0 0 28px; margin-top: 2px; }
+.msg-bot .body { flex: 1; min-width: 0; }
+.msg-bot .body p {
+  font-family: var(--font); font-size: 1rem; line-height: 1.7;
+  color: var(--text); margin: 0 0 0.75em;
+}
+.msg-bot .body p:last-child { margin-bottom: 0; }
+.msg-bot .body.muted p { color: var(--muted); }
+
+.cite {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 1.35em; height: 1.35em; padding: 0 0.35em; margin: 0 0.12em;
+  border-radius: 999px; background: var(--chip); color: var(--text);
+  font-family: var(--font); font-size: 0.72em; font-weight: 600;
+  vertical-align: 0.15em;
+}
+.thinking { color: var(--muted); font-family: var(--font); }
+.caret {
+  display: inline-block; width: 2px; height: 1.05em; background: var(--text);
+  vertical-align: -0.15em; margin-left: 2px; animation: blink 1s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
+
+/* ---------- source cards ---------- */
+.sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-top: 14px; }
+.source {
+  border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+  background: var(--card); font-family: var(--font);
+}
+.source-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.source-top .cite { margin: 0; vertical-align: 0; }
+.source-page { font-size: 0.8rem; color: var(--muted); }
+.source-title {
+  font-size: 0.86rem; font-weight: 600; color: var(--text); line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.source-id { font-size: 0.72rem; color: var(--muted); margin-top: 4px; word-break: break-all; }
+.meta { font-family: var(--font); font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+
+/* ---------- example cards (main area buttons) ---------- */
+[data-testid="stMain"] .stButton button, section.main .stButton button {
+  width: 100%; min-height: 4.2rem; background: var(--card);
+  border: 1px solid var(--line); border-radius: 14px;
+  justify-content: flex-start; text-align: left; padding: 10px 14px;
+  color: var(--text); transition: background 0.15s ease, border-color 0.15s ease;
+}
+[data-testid="stMain"] .stButton button:hover, section.main .stButton button:hover {
+  background: var(--hover); border-color: rgba(18, 194, 91, 0.45); color: var(--text);
+}
+
+/* ---------- input bar ---------- */
+[data-testid="stBottom"], [data-testid="stBottom"] > div,
+[data-testid="stBottomBlockContainer"] { background: var(--bg) !important; }
 [data-testid="stChatInput"] {
-  border: 1px solid rgba(0, 230, 118, 0.35) !important; border-radius: 16px !important;
-  box-shadow: 0 0 24px rgba(0, 230, 118, 0.10);
+  background: var(--card) !important; border: 1px solid var(--line) !important;
+  border-radius: 26px !important; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
 }
 [data-testid="stChatInput"]:focus-within {
-  border-color: var(--green) !important; box-shadow: 0 0 28px rgba(0, 230, 118, 0.25);
+  border-color: rgba(18, 194, 91, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(18, 194, 91, 0.12), 0 8px 28px rgba(0, 0, 0, 0.55);
 }
-
-/* ---------- buttons ---------- */
-.stButton button {
-  border-radius: 999px; border: 1px solid var(--border);
-  background: var(--card); color: var(--text); transition: all 0.15s ease;
-}
-.stButton button:hover {
-  border-color: var(--green); color: var(--green-bright);
-  box-shadow: 0 0 16px rgba(0, 230, 118, 0.22);
-}
-
-/* ---------- sources ---------- */
-[data-testid="stExpander"] {
-  border: 1px solid var(--border) !important; border-radius: 12px !important; background: var(--bg);
-}
-.source { display: flex; gap: 12px; padding: 8px 2px; border-bottom: 1px dashed var(--border); }
-.source:last-child { border-bottom: none; }
-.num {
-  flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
-  background: var(--green); color: #04150A; font-weight: 700; font-size: 0.85rem;
-  display: flex; align-items: center; justify-content: center;
-}
-.src-title { font-weight: 600; color: var(--text); }
-.meta { color: var(--muted); font-size: 0.8rem; }
-.chunk { font-family: monospace; font-size: 0.75rem; color: var(--green-bright); opacity: 0.85; }
-
-.warn {
-  margin-top: 8px; padding: 8px 12px; border-radius: 10px; font-size: 0.85rem;
-  color: #FFD180; background: rgba(255, 171, 0, 0.08); border: 1px solid rgba(255, 171, 0, 0.3);
-}
-.stats { margin-top: 8px; color: var(--muted); font-size: 0.78rem; }
-.stats b { color: var(--green-bright); font-weight: 600; }
+[data-testid="stChatInput"] textarea { color: var(--text) !important; font-family: var(--font) !important; }
+[data-testid="stChatInputSubmitButton"] { background: var(--brand) !important; border-radius: 999px !important; }
+[data-testid="stChatInputSubmitButton"] svg { fill: #FFFFFF !important; color: #FFFFFF !important; }
 
 /* ---------- sidebar ---------- */
-[data-testid="stSidebar"] { background: #0A120E; border-right: 1px solid var(--border); }
-.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.brand svg { filter: drop-shadow(0 0 12px rgba(0, 230, 118, 0.4)); }
-.brand-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--green-bright); }
-.step { display: flex; gap: 10px; margin: 8px 0; font-size: 0.88rem; color: var(--text); }
-.step .num { width: 22px; height: 22px; font-size: 0.75rem; border-radius: 6px; }
-.book { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-.book:last-child { border-bottom: none; }
+[data-testid="stSidebar"] { background: var(--side); border-right: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; margin: 2px 0 16px; }
+.brand-name { font-family: var(--font); font-weight: 700; font-size: 1.15rem; color: var(--text); }
+.side-label { font-family: var(--font); font-size: 0.78rem; font-weight: 600; color: var(--muted); margin: 18px 0 4px 4px; }
+.side-note { font-family: var(--font); font-size: 0.78rem; color: var(--muted); line-height: 1.5; margin: 14px 4px 0; }
+.book { font-family: var(--font); font-size: 0.82rem; color: var(--text); padding: 5px 0; line-height: 1.35; }
+.book span { display: block; font-size: 0.74rem; color: var(--muted); }
+
+[data-testid="stSidebar"] .stButton button {
+  width: 100%; justify-content: flex-start; text-align: left;
+  background: transparent; border: none; border-radius: 10px;
+  padding: 6px 10px; min-height: 2.2rem; color: var(--text);
+}
+[data-testid="stSidebar"] .stButton button:hover { background: var(--hover); color: var(--text); }
+[data-testid="stSidebar"] .stButton button[kind="primary"],
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
+  background: var(--active); color: var(--text); font-weight: 600;
+}
+[data-testid="stSidebar"] .stButton:first-of-type button {
+  border: 1px solid var(--line); background: var(--card);
+}
+[data-testid="stSidebar"] [data-testid="stExpander"] {
+  background: var(--card); border: 1px solid var(--line) !important; border-radius: 12px;
+}
+.stButton button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 </style>
 """
 
 st.markdown(CSS, unsafe_allow_html=True)
 books = load_books()
 
-# ---------- sidebar ----------
-with st.sidebar:
-    st.markdown(
-        f'<div class="brand">{logo(46, "g_side")}<div>'
-        f'<div class="brand-name">{BOT_NAME}</div>'
-        f'<div class="meta">Book-grounded AI assistant</div></div></div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown("#### How it works")
-    st.markdown(
-        '<div class="step"><span class="num">1</span>Searches your question across the books</div>'
-        '<div class="step"><span class="num">2</span>Picks the most relevant passages</div>'
-        '<div class="step"><span class="num">3</span>Writes an answer citing each passage</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f'<div class="pills"><span class="pill">{len(books)} books</span>'
-        f'<span class="pill">{MODEL}</span><span class="pill">Runs offline</span></div>',
-        unsafe_allow_html=True,
-    )
-    with st.expander(f"📚 Library ({len(books)} books)"):
-        st.markdown(
-            "".join(
-                f'<div class="book"><b>{b["title"]}</b><br>'
-                f'<span class="meta">{b["author"]}</span></div>'
-                for b in books
-            ),
-            unsafe_allow_html=True,
-        )
-    st.write("")
-    if st.button("🗑️  Clear chat"):
-        st.session_state.messages = []
-        st.rerun()
 
-# ---------- hero ----------
-st.markdown(
-    f'<div class="hero">{logo(68, "g_hero")}<div>'
-    f'<h1>{BOT_NAME}</h1>'
-    f'<p>Answers grounded in {len(books)} data science textbooks, with every claim cited.</p>'
-    f'</div></div>',
-    unsafe_allow_html=True,
-)
-
-
-# ---------- helpers ----------
-def render_assistant(msg):
-    st.markdown(msg["content"])
-    if msg.get("insufficient"):
-        st.markdown('<div class="warn">⚠️ No supporting passage found in the books.</div>',
-                    unsafe_allow_html=True)
-    if msg.get("sources"):
-        with st.expander(f"📚 Sources ({len(msg['sources'])})"):
-            st.markdown(
-                "".join(
-                    f'<div class="source"><span class="num">{s["n"]}</span><div>'
-                    f'<div class="src-title">{s["title"]}</div>'
-                    f'<div class="meta">{s["author"]} · {s["edition"]} · PDF page {s["page"]}</div>'
-                    f'<div class="chunk">{s["chunk_id"]}</div></div></div>'
-                    for s in msg["sources"]
-                ),
-                unsafe_allow_html=True,
-            )
-    if msg.get("time") is not None:
-        n = len(msg.get("sources", []))
-        st.markdown(
-            f'<div class="stats">⚡ <b>{msg["time"]:.1f}s</b> · {n} source{"s" if n != 1 else ""}</div>',
-            unsafe_allow_html=True,
-        )
-
-
-# ---------- state ----------
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# ---------- conversations ----------
+if "chats" not in st.session_state:
+    st.session_state.chats = [{"title": "New chat", "messages": []}]
+    st.session_state.current = 0
 if "pending" not in st.session_state:
     st.session_state.pending = None
 
-typed = st.chat_input("Ask anything about the books...")
+
+def new_chat():
+    chats = st.session_state.chats
+    if chats[st.session_state.current]["messages"]:
+        chats.append({"title": "New chat", "messages": []})
+        st.session_state.current = len(chats) - 1
+
+
+# ---------- html builders ----------
+def answer_html(text, caret=False):
+    safe = escape(text)
+    safe = re.sub(r"\[(\d+)\]", r'<span class="cite">\1</span>', safe)
+    paras = [p.strip() for p in safe.split("\n") if p.strip()] or [""]
+    if caret:
+        paras[-1] += '<span class="caret"></span>'
+    return "".join(f"<p>{p}</p>" for p in paras)
+
+
+def sources_html(sources):
+    if not sources:
+        return ""
+    cards = "".join(
+        f'<div class="source"><div class="source-top"><span class="cite">{s["n"]}</span>'
+        f'<span class="source-page">PDF page {s["page"]}</span></div>'
+        f'<div class="source-title" title="{escape(s["title"])}">{escape(s["title"])}</div>'
+        f'<div class="source-id">{escape(s["chunk_id"])}</div></div>'
+        for s in sources
+    )
+    return f'<div class="sources">{cards}</div>'
+
+
+def user_html(text):
+    return f'<div class="msg-user"><div class="bubble">{escape(text)}</div></div>'
+
+
+def bot_html(body, extra="", muted=False):
+    cls = "body muted" if muted else "body"
+    return (
+        f'<div class="msg-bot"><div class="avatar">{logo(28)}</div>'
+        f'<div class="{cls}">{body}{extra}</div></div>'
+    )
+
+
+def finished_bot(m):
+    if m["insufficient"]:
+        body = "<p>I couldn't find this in the books on the shelf, so I won't guess.</p>"
+        meta = f'<div class="meta">Checked in {m["time"]:.1f} s</div>'
+        return bot_html(body, meta, muted=True)
+    n = len(m["sources"])
+    meta = f'<div class="meta">{m["time"]:.1f} s, {n} source{"s" if n != 1 else ""}</div>'
+    return bot_html(answer_html(m["answer"]), sources_html(m["sources"]) + meta)
+
+
+# ---------- sidebar ----------
+with st.sidebar:
+    st.markdown(
+        f'<div class="brand">{logo(30)}<div class="brand-name">{BOT_NAME}</div></div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("＋  New chat", key="new_chat"):
+        new_chat()
+        st.rerun()
+
+    history = [(i, c) for i, c in enumerate(st.session_state.chats) if c["messages"]]
+    if history:
+        st.markdown('<div class="side-label">Recent</div>', unsafe_allow_html=True)
+        for i, c in reversed(history):
+            kind = "primary" if i == st.session_state.current else "secondary"
+            if st.button(c["title"], key=f"chat{i}", type=kind):
+                st.session_state.current = i
+                st.rerun()
+
+    st.markdown('<div class="side-label">Library</div>', unsafe_allow_html=True)
+    with st.expander(f"{len(books)} books"):
+        st.markdown(
+            "".join(f'<div class="book">{escape(b["title"])}<span>{escape(b["author"])}</span></div>'
+                    for b in books),
+            unsafe_allow_html=True,
+        )
+    st.markdown(
+        f'<div class="side-note">Runs offline with {MODEL}. Answers come only from the library, '
+        f'so check important answers against the cited pages.</div>',
+        unsafe_allow_html=True,
+    )
+
+# ---------- main ----------
+chat = st.session_state.chats[st.session_state.current]
+
+typed = st.chat_input(f"Message {BOT_NAME}")
 question = typed or st.session_state.pending
 st.session_state.pending = None
 
-# ---------- history ----------
-for msg in st.session_state.messages:
-    avatar = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
-    with st.chat_message(msg["role"], avatar=avatar):
-        if msg["role"] == "user":
-            st.markdown(msg["content"])
-        else:
-            render_assistant(msg)
-
-# ---------- example questions (only on an empty chat) ----------
-if not st.session_state.messages and not question:
-    st.markdown('<div class="meta" style="margin-bottom:8px;">Try one of these:</div>',
-                unsafe_allow_html=True)
+if not chat["messages"] and not question:
+    st.markdown(
+        f'<div class="welcome">{logo(52)}'
+        f'<div class="welcome-h">What would you like to know?</div>'
+        f'<div class="welcome-p">Answers come from {len(books)} data science textbooks, '
+        f'with the page for every claim.</div></div>',
+        unsafe_allow_html=True,
+    )
     cols = st.columns(2)
-    for i, ex in enumerate(EXAMPLES):
-        if cols[i % 2].button(ex, key=f"ex{i}"):
-            st.session_state.pending = ex
+    for i, (label, prompt_text) in enumerate(EXAMPLES):
+        if cols[i % 2].button(f"**{label}**  \n{prompt_text}", key=f"ex{i}"):
+            st.session_state.pending = prompt_text
             st.rerun()
 
-# ---------- answer a new question ----------
+for m in chat["messages"]:
+    st.markdown(user_html(m["question"]), unsafe_allow_html=True)
+    st.markdown(finished_bot(m), unsafe_allow_html=True)
+
 if question:
-    st.session_state.messages.append({"role": "user", "content": question})
-    with st.chat_message("user", avatar=USER_AVATAR):
-        st.markdown(question)
+    if not chat["messages"]:
+        chat["title"] = question if len(question) <= 38 else question[:36].rstrip() + "…"
 
-    with st.chat_message("assistant", avatar=BOT_AVATAR):
-        placeholder = st.empty()
-        start = time.time()
+    st.markdown(user_html(question), unsafe_allow_html=True)
+    slot = st.empty()
+    start = time.time()
+    slot.markdown(bot_html('<p class="thinking">Searching the library…</p>'), unsafe_allow_html=True)
 
-        with st.spinner("Searching the books..."):
-            results, prompt = prepare(question)
+    results, prompt = prepare(question)
+    if results is None:
+        result = no_evidence()
+    else:
+        text = ""
+        for piece in stream_tokens(prompt):
+            text += piece
+            slot.markdown(bot_html(answer_html(text, caret=True)), unsafe_allow_html=True)
+        result = finalize(text, results)
 
-        if results is None:
-            result = no_evidence()
-        else:
-            text = ""
-            for piece in stream_tokens(prompt):
-                text += piece
-                placeholder.markdown(text + " ▌")
-            result = finalize(text, results)
-
-        placeholder.empty()
-        msg = {
-            "role": "assistant",
-            "content": result["answer"],
-            "sources": result["sources"],
-            "insufficient": result["insufficient_evidence"],
-            "time": time.time() - start,
-        }
-        render_assistant(msg)
-
-    st.session_state.messages.append(msg)
+    m = {
+        "question": question,
+        "answer": result["answer"],
+        "sources": result["sources"],
+        "insufficient": result["insufficient_evidence"],
+        "time": time.time() - start,
+    }
+    slot.markdown(finished_bot(m), unsafe_allow_html=True)
+    chat["messages"].append(m)
+    st.rerun()
