@@ -1,0 +1,53 @@
+{
+  "group_id": "G000",
+  "subject": "Data Science",
+  "python_version": "3.14",
+  "note": "G000 and the embedding model are placeholders until the coordinator confirms them.",
+
+  "embedding": {
+    "library": "sentence-transformers",
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "normalize_embeddings": true
+  },
+
+  "ingestion": {
+    "tool": "PyMuPDF",
+    "page_numbers": "PDF page numbers (1-based), not printed page numbers"
+  },
+
+  "chunking": {
+    "chunk_words": 180,
+    "overlap_words": 40,
+    "min_page_words": 20,
+    "chunks_stay_within_one_page": true
+  },
+
+  "index": {
+    "type": "faiss.IndexFlatIP",
+    "similarity": "cosine (inner product of normalized vectors)",
+    "files": ["data/index/faiss.index", "data/index/chunks_meta.jsonl"]
+  },
+
+  "retrieval": {
+    "top_k": 2,
+    "per_book_when_named": 2,
+    "min_score": 0.35,
+    "book_filtering": "If a question names a book, only that book's passages are searched, using the question with book names removed."
+  },
+
+  "generation": {
+    "runtime": "Ollama",
+    "model": "llama3.2:3b",
+    "options": {"num_predict": 300, "num_ctx": 2048, "temperature": 0},
+    "keep_alive": "30m",
+    "streaming": true
+  },
+
+  "safeguards": [
+    "Refuse when the best passage scores below min_score",
+    "Refuse time-sensitive questions (latest, newest, current version, today) before generation",
+    "Keep only citation numbers that match retrieved passages; remove invented ones",
+    "Flag answers that have no valid citation as not verified"
+  ]
+}
