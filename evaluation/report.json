@@ -1,0 +1,267 @@
+{
+  "group_id": "G000",
+  "subject": "Data Science",
+  "report_status": "FINAL - answer correctness, citation support and groundedness were suggested by an AI assistant, then reviewed and confirmed by the group (2026-10-17). Instructor review still pending.",
+  "test_conditions": {
+    "hardware": "Acer TravelMate P215-54, Intel Core i7-1255U, 12 GB RAM, integrated graphics only (CPU inference), Windows 11",
+    "python": "3.14.7",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "generation_model": "llama3.2:3b via Ollama (offline)",
+    "generation_options": {
+      "num_predict": 300,
+      "num_ctx": 2048,
+      "temperature": 0
+    },
+    "chunking": {
+      "chunk_words": 180,
+      "overlap_words": 40
+    },
+    "retrieval": {
+      "top_k": 2,
+      "per_book_when_named": 2,
+      "min_score": 0.35,
+      "index": "FAISS IndexFlatIP (cosine)"
+    },
+    "benchmark": "30 questions: 10 validation, 20 held-out test. 6 categories. Reference answers drafted and reviewed by the group; expected evidence pages labelled by the group with AI-suggested labels that the group reviewed.",
+    "test_run_date": "2026-10-17T10:47:08",
+    "final_validation_run_date": "2026-10-17T10:36:48",
+    "note_on_recall": "Recall@5 is measured with plain retrieval (no book filtering). The chatbot itself filters by named books, so cross-book retrieval in the app is better than the Recall@5 figure suggests.",
+    "answer_review": "Each answer was marked yes / partly / no against the reference answer. Marks were first suggested by an AI assistant, then reviewed and confirmed by the group."
+  },
+  "document_processing": {
+    "books_in_manifest": 14,
+    "required_books": 15,
+    "books_processed": 14,
+    "failed_books": 0,
+    "total_pdf_pages": 7928,
+    "nearly_empty_pages_under_50_chars": 131,
+    "ocr_required": 0,
+    "chunks": 23369,
+    "extraction_issues": [
+      "ISLR PDF pages 146, 282, 284 and 290 are plots whose tick marks were extracted as long runs of '| | |'. They produced 211 junk chunks (141 from page 146 alone).",
+      "Equations in maths-heavy books (Bishop, MML, Convex Optimization, UML) are flattened into plain text, which loses structure.",
+      "Citations use PDF page numbers, not printed page numbers."
+    ],
+    "metadata_completeness": "All 14 manifest entries have title, author, edition, publisher, year, source URL and permission status. ISBN fields are empty."
+  },
+  "metrics": {
+    "test": {
+      "retrieval_recall_at_5": {
+        "rate": 0.75,
+        "n": 16
+      },
+      "abstention_accuracy_on_no_answer_questions": {
+        "rate": 0.75,
+        "n": 4
+      },
+      "false_refusal_rate_on_answerable_questions": {
+        "rate": 0.0,
+        "n": 16
+      },
+      "citation_traceability_all_citations_resolve": {
+        "rate": 1.0,
+        "n": 17
+      },
+      "citation_hits_expected_page": {
+        "rate": 0.786,
+        "n": 14
+      },
+      "uncited_answer_rate": {
+        "rate": 0.0,
+        "n": 17
+      },
+      "response_time_seconds": {
+        "mean": 19.7,
+        "median": 20.1,
+        "max": 45.7
+      },
+      "peak_system_ram": "about 93% of 12 GB (~11.2 GB) for the whole system during the test run; per-process RAM not recorded",
+      "answer_correctness": {
+        "n": 16,
+        "yes": 5,
+        "partly": 8,
+        "no": 3,
+        "strict_rate": 0.312,
+        "lenient_rate_partly_as_half": 0.562
+      },
+      "citation_supports_claim": {
+        "n": 17,
+        "yes": 9,
+        "partly": 4,
+        "no": 4,
+        "strict_rate": 0.529,
+        "lenient_rate_partly_as_half": 0.647
+      }
+    },
+    "validation_final": {
+      "retrieval_recall_at_5": {
+        "rate": 0.857,
+        "n": 7
+      },
+      "abstention_accuracy_on_no_answer_questions": {
+        "rate": 1.0,
+        "n": 3
+      },
+      "false_refusal_rate_on_answerable_questions": {
+        "rate": 0.0,
+        "n": 7
+      },
+      "citation_traceability_all_citations_resolve": {
+        "rate": 1.0,
+        "n": 7
+      },
+      "citation_hits_expected_page": {
+        "rate": 0.833,
+        "n": 6
+      },
+      "uncited_answer_rate": {
+        "rate": 0.0,
+        "n": 7
+      },
+      "response_time_seconds": {
+        "mean": 8.6,
+        "median": 10.4,
+        "max": 21.8
+      },
+      "answer_correctness": {
+        "n": 7,
+        "yes": 4,
+        "partly": 2,
+        "no": 1,
+        "strict_rate": 0.571,
+        "lenient_rate_partly_as_half": 0.714
+      },
+      "citation_supports_claim": {
+        "n": 7,
+        "yes": 4,
+        "partly": 2,
+        "no": 1,
+        "strict_rate": 0.571,
+        "lenient_rate_partly_as_half": 0.714
+      }
+    }
+  },
+  "targets_vs_results": [
+    {
+      "measure": "Book manifest >= 15 books",
+      "result": "14 books",
+      "status": "not met - coordinator approval needed"
+    },
+    {
+      "measure": "Citation traceability 100%",
+      "result": "100% (test and validation)",
+      "status": "met"
+    },
+    {
+      "measure": "Retrieval Recall@5 >= 80%",
+      "result": "75.0% test (12/16), 85.7% validation (6/7)",
+      "status": "not met on test"
+    },
+    {
+      "measure": "Answer correctness >= 80%",
+      "result": "31.3% strict / 56.3% lenient on test (group-reviewed)",
+      "status": "not met"
+    },
+    {
+      "measure": "Insufficient evidence on no-answer questions",
+      "result": "75% test (3/4), 100% validation (3/3)",
+      "status": "reported"
+    }
+  ],
+  "storage_and_model_size": {
+    "book_pdfs_MB": 179.2,
+    "extracted_text_MB": 18.8,
+    "chunks_MB": 25.1,
+    "faiss_index_plus_metadata_MB": 61.0,
+    "embedding_model_MB": 90.9,
+    "generation_model_GB": 2.0
+  },
+  "validation_tuning_history": [
+    {
+      "run": 1,
+      "change": "baseline",
+      "abstention": 0.333,
+      "recall_at_5": 0.857,
+      "mean_seconds": 16.1,
+      "max_seconds": 35.6
+    },
+    {
+      "run": 2,
+      "change": "stricter refusal rule; search by topic with book names removed; drop weak passages from named books",
+      "abstention": 0.667,
+      "recall_at_5": 0.857,
+      "mean_seconds": 15.2,
+      "max_seconds": 36.1
+    },
+    {
+      "run": 3,
+      "change": "rule-based refusal for time-sensitive questions (latest, current, today) before generation",
+      "abstention": 1.0,
+      "recall_at_5": 0.857,
+      "mean_seconds": 8.6,
+      "max_seconds": 21.8
+    }
+  ],
+  "failures_and_error_analysis": [
+    {
+      "type": "arithmetic",
+      "ids": [
+        "Q016",
+        "Q017",
+        "Q018",
+        "Q019"
+      ],
+      "finding": "The 3B model gets calculations wrong even when the right formula is retrieved (Q018). For Q016 and Q017 no retrieved passage contained the answer; the model copied nearby numbers (1/4, 1/2)."
+    },
+    {
+      "type": "word ambiguity",
+      "ids": [
+        "Q030"
+      ],
+      "finding": "'Transformers' matched OpenIntro's 'transformations' (log rescaling), so the chatbot answered instead of refusing."
+    },
+    {
+      "type": "retrieval of explanations",
+      "ids": [
+        "Q013",
+        "Q011"
+      ],
+      "finding": "'Why' questions retrieve on-topic passages that do not contain the explanation; D2L's section comparing CNNs, RNNs and attention was not retrieved."
+    },
+    {
+      "type": "cross-book crowding",
+      "ids": [
+        "Q020",
+        "Q021",
+        "Q023"
+      ],
+      "finding": "Without book filtering one book's passages crowd out the other. Book filtering in the chatbot fixes retrieval, but the model still sometimes attributes a claim to the wrong book (Q022, Q023)."
+    },
+    {
+      "type": "wrong sense of a term",
+      "ids": [
+        "Q009",
+        "Q015"
+      ],
+      "finding": "Q009 retrieved a web-link 'inverted index' table instead of the term index; during labelling, 'bias' also matched the intercept term in D2L."
+    },
+    {
+      "type": "instruction following",
+      "ids": [
+        "Q011",
+        "Q019"
+      ],
+      "finding": "Some sentences carry no citation despite the prompt rule; long answers (Q021, Q022) are cut off by the 300-token limit."
+    }
+  ],
+  "limitations": [
+    "Small 3B model on CPU: weak arithmetic and comparison reasoning; cross-book answers take 35-46 s.",
+    "Time-sensitive refusal is a keyword rule, not learned behaviour.",
+    "Only 30 benchmark questions (20 test), so each test question moves a metric by 5-25 percentage points.",
+    "Citations point to PDF pages, not printed pages.",
+    "Junk chunks from plot pages remain in the index.",
+    "Embedding model and group ID are placeholders until the coordinator confirms them; changing them requires rebuilding the index and rerunning the evaluation.",
+    "Answer correctness was reviewed by the group, not yet by the instructor or a subject expert."
+  ]
+}
