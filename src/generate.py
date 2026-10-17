@@ -51,6 +51,15 @@ def books_named_in(question):
     return named
 
 
+def strip_book_names(question):
+    """Remove book names from the question so the search matches the topic, not the title."""
+    q = question
+    for aliases in BOOK_ALIASES.values():
+        for a in aliases:
+            q = re.sub(rf"\b{re.escape(a)}\b", " ", q, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", q).strip()
+
+
 PROMPT = """You answer questions using ONLY the numbered book passages below.
 
 Rules:
@@ -60,7 +69,8 @@ Rules:
 - Every sentence must have a citation.
 - When you mention a book, use the book title shown next to the passage number.
 - If the question asks you to compare books, first say what each book's passages say, then state how they are similar or different.
-- Only if the passages are completely unrelated to the question, reply exactly: INSUFFICIENT EVIDENCE
+- If the passages do not contain the information needed to answer the question, reply exactly: INSUFFICIENT EVIDENCE
+- If the question asks about current or latest information (latest versions, prices, news, people in office), reply exactly: INSUFFICIENT EVIDENCE
 - Keep the answer under 150 words.
 - Do not add notes or comments about the passages.
 
@@ -79,15 +89,28 @@ def no_evidence():
     }
 
 
+TIME_SENSITIVE = re.compile(
+    r"\b(latest|newest|most recent|current version|right now|today|this year|nowadays)\b",
+    re.IGNORECASE,
+)
+
+
 def prepare(question):
     """Find passages and build the prompt. Returns (None, None) if there is no evidence."""
+    # books are fixed snapshots, so they cannot answer questions about the present
+    if TIME_SENSITIVE.search(question):
+        return None, None
+
     named = books_named_in(question)
 
     if named:
-        # take the best passages from each named book
+        # search by topic only (book names removed), then keep the best
+        # passages from each named book that are actually relevant
+        topic = strip_book_names(question)
         results = []
         for source_file in named:
-            results += retrieve(question, top_k=PER_BOOK, books={source_file})
+            hits = retrieve(topic, top_k=PER_BOOK, books={source_file})
+            results += [h for h in hits if h["score"] >= MIN_SCORE]
     else:
         results = retrieve(question, top_k=TOP_K)
 

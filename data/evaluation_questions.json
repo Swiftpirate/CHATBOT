@@ -1,0 +1,739 @@
+{
+  "group_id": "G000",
+  "subject": "Data Science",
+  "notes": "Draft benchmark. Reference answers must be reviewed by the group and the instructor. expected_evidence is filled in with the labelling helper (source_file + PDF page), so it stays valid if book IDs change.",
+  "questions": [
+    {
+      "id": "Q001",
+      "category": "direct_factual",
+      "split": "validation",
+      "question": "What is overfitting?",
+      "reference_answer": "Overfitting is when a model fits the training data too closely, including its noise, so it has low training error but performs poorly (high test error) on new data.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf",
+        "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+        "understanding-machine-learning-theory-algorithms.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "mml-book.pdf",
+          "page": 277
+        },
+        {
+          "source_file": "vmls.pdf",
+          "page": 272
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 277
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 296
+        },
+        {
+          "source_file": "book2016June9.pdf",
+          "page": 191
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 268
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 296
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q002",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is PageRank?",
+      "reference_answer": "PageRank is a score assigned to each web page based on the link structure of the web; it can be seen as the long-run probability that a random surfer following links (with occasional random jumps) is on that page. Higher PageRank means a more important page.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "book.pdf",
+        "irbookprint.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "book.pdf",
+          "page": 183
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 215
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 119
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 489
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q003",
+      "category": "direct_factual",
+      "split": "validation",
+      "question": "What is TF-IDF?",
+      "reference_answer": "TF-IDF is a term weighting scheme: the weight of a term in a document is its term frequency multiplied by its inverse document frequency (based on log of total documents divided by documents containing the term). Terms frequent in a document but rare across the collection get high weight.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "irbookprint.pdf",
+        "book.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "book.pdf",
+          "page": 36
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 144
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 27
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q004",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is k-means clustering?",
+      "reference_answer": "K-means partitions data into K clusters by repeatedly assigning each point to the nearest cluster centroid and then recomputing each centroid as the mean of its assigned points, aiming to minimise within-cluster variation.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf",
+        "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+        "book.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 401
+        },
+        {
+          "source_file": "ed3book_aug26.pdf",
+          "page": 395
+        },
+        {
+          "source_file": "vmls.pdf",
+          "page": 87
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 273
+        },
+        {
+          "source_file": "book2016June9.pdf",
+          "page": 266
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q005",
+      "category": "direct_factual",
+      "split": "validation",
+      "question": "What is a p-value?",
+      "reference_answer": "A p-value is the probability, assuming the null hypothesis is true, of observing data at least as extreme as the data actually observed. A small p-value is evidence against the null hypothesis.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "os.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "os.pdf",
+          "page": 195
+        },
+        {
+          "source_file": "os.pdf",
+          "page": 194
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q006",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is singular value decomposition?",
+      "reference_answer": "Singular value decomposition factorises a matrix A as A = U Sigma V^T, where U and V have orthonormal columns and Sigma is diagonal with non-negative singular values.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "mml-book.pdf",
+        "978-3-031-41026-0.pdf",
+        "book2016June9.pdf",
+        "book.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 431
+        },
+        {
+          "source_file": "bv_cvxbook.pdf",
+          "page": 662
+        },
+        {
+          "source_file": "book2016June9.pdf",
+          "page": 38
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 125
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 453
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q007",
+      "category": "direct_factual",
+      "split": "validation",
+      "question": "What is a convex function?",
+      "reference_answer": "A function f with a convex domain is convex if for all x, y in its domain and 0 <= theta <= 1, f(theta x + (1 - theta) y) <= theta f(x) + (1 - theta) f(y); the line segment between any two points on the graph lies on or above the graph.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "bv_cvxbook.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "bv_cvxbook.pdf",
+          "page": 81
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 242
+        },
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 157
+        },
+        {
+          "source_file": "book2016June9.pdf",
+          "page": 344
+        },
+        {
+          "source_file": "bv_cvxbook.pdf",
+          "page": 81
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q008",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is dropout in neural networks?",
+      "reference_answer": "Dropout is a regularisation technique where, during training, each hidden unit is randomly set to zero with some probability (and the rest are rescaled), which reduces overfitting; it is turned off at test time.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "d2l-en.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 234
+        },
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 236
+        },
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 235
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q009",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is an inverted index?",
+      "reference_answer": "An inverted index maps each term in a vocabulary to a postings list of the documents (and possibly positions) in which that term appears, allowing fast lookup of documents that contain query terms.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "irbookprint.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 31
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 31
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 182
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 74
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 31
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q010",
+      "category": "direct_factual",
+      "split": "test",
+      "question": "What is a Markov chain?",
+      "reference_answer": "A Markov chain is a sequence of random states in which the probability of the next state depends only on the current state (not on earlier history), described by transition probabilities between states.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "prob.pdf",
+        "book2016June9.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "prob.pdf",
+          "page": 422
+        },
+        {
+          "source_file": "book2016June9.pdf",
+          "page": 140
+        },
+        {
+          "source_file": "ed3book_aug26.pdf",
+          "page": 415
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 490
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q011",
+      "category": "reasoning",
+      "split": "validation",
+      "question": "Why does regularization help reduce overfitting?",
+      "reference_answer": "Regularization adds a penalty on model complexity, such as the size of the coefficients (ridge or lasso). This shrinks the estimates, reducing variance at the cost of a small increase in bias, which often lowers test error.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf",
+        "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+        "d2l-en.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 160
+        },
+        {
+          "source_file": "ed3book_aug26.pdf",
+          "page": 130
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 268
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q012",
+      "category": "reasoning",
+      "split": "test",
+      "question": "Why is cross-validation used instead of training error to choose a model?",
+      "reference_answer": "Training error keeps decreasing as models become more flexible and underestimates test error. Cross-validation estimates test error by repeatedly fitting on part of the data and evaluating on held-out data, giving a fairer basis for choosing a model.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 149
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 220
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 228
+        },
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 150
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 290
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q013",
+      "category": "reasoning",
+      "split": "test",
+      "question": "Why do transformers use attention instead of recurrence?",
+      "reference_answer": "Attention lets every position directly attend to every other position, capturing long-range dependencies without passing information step by step, and allows computation over all positions in parallel, unlike recurrent networks which process tokens sequentially.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "d2l-en.pdf",
+        "ed3book_aug26.pdf"
+      ],
+      "expected_evidence": [],
+      "review_status": "evidence_labelled",
+      "no_relevant_in_top10": true
+    },
+    {
+      "id": "Q014",
+      "category": "reasoning",
+      "split": "test",
+      "question": "Why is any local minimum of a convex function also a global minimum?",
+      "reference_answer": "If a local minimum x were not global, there would be a point y with a lower value. By convexity, points on the segment between x and y arbitrarily close to x would also have lower values than x, contradicting that x is a local minimum.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "bv_cvxbook.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 517
+        },
+        {
+          "source_file": "bv_cvxbook.pdf",
+          "page": 83
+        },
+        {
+          "source_file": "d2l-en.pdf",
+          "page": 517
+        },
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 158
+        },
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 158
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q015",
+      "category": "reasoning",
+      "split": "test",
+      "question": "How does the bias-variance tradeoff explain the choice of model flexibility?",
+      "reference_answer": "As flexibility increases, bias decreases but variance increases. Test error is therefore U-shaped, so the best model has intermediate flexibility that balances bias and variance.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf",
+        "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 51
+        },
+        {
+          "source_file": "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+          "page": 169
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 50
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 50
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 50
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q016",
+      "category": "numerical",
+      "split": "validation",
+      "question": "If a coin is fair, what is the probability of getting exactly 2 heads in 3 tosses?",
+      "reference_answer": "3/8 = 0.375. There are 8 equally likely outcomes, and 3 of them (HHT, HTH, THH) have exactly 2 heads; equivalently C(3,2) x 0.5^3.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "prob.pdf",
+        "os.pdf"
+      ],
+      "expected_evidence": [],
+      "review_status": "evidence_labelled",
+      "no_relevant_in_top10": true
+    },
+    {
+      "id": "Q017",
+      "category": "numerical",
+      "split": "test",
+      "question": "What is the expected value when rolling a fair six-sided die?",
+      "reference_answer": "3.5, because (1 + 2 + 3 + 4 + 5 + 6) / 6 = 3.5.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "prob.pdf",
+        "os.pdf"
+      ],
+      "expected_evidence": [],
+      "review_status": "evidence_labelled",
+      "no_relevant_in_top10": true
+    },
+    {
+      "id": "Q018",
+      "category": "numerical",
+      "split": "test",
+      "question": "If precision is 0.8 and recall is 0.5, what is the F1 score?",
+      "reference_answer": "About 0.615. F1 = 2PR / (P + R) = 2 x 0.8 x 0.5 / 1.3 = 8/13.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "irbookprint.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 244
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 182
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q019",
+      "category": "numerical",
+      "split": "test",
+      "question": "What is the variance of a single fair coin flip where heads = 1 and tails = 0?",
+      "reference_answer": "0.25. For a Bernoulli variable the variance is p(1 - p) = 0.5 x 0.5.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "prob.pdf",
+        "os.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "prob.pdf",
+          "page": 272
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q020",
+      "category": "cross_book",
+      "split": "validation",
+      "question": "Do Bishop and ISLR define the bias-variance tradeoff the same way?",
+      "reference_answer": "They describe the same idea: expected squared error decomposes into squared bias, variance and irreducible noise. Bishop derives the decomposition mathematically, while ISLR explains it more intuitively through model flexibility and test MSE plots.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+        "ISLR+Seventh+Printing.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 50
+        },
+        {
+          "source_file": "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+          "page": 171
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 51
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 50
+        },
+        {
+          "source_file": "ISLR+Seventh+Printing.pdf",
+          "page": 49
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q021",
+      "category": "cross_book",
+      "split": "test",
+      "question": "How do ISLR and Understanding Machine Learning describe overfitting?",
+      "reference_answer": "ISLR describes overfitting as a flexible method following the noise in training data, giving small training error but large test error. Understanding Machine Learning describes it as a hypothesis that fits the training sample well but performs poorly on the true distribution, and addresses it by restricting the hypothesis class (inductive bias).",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "ISLR+Seventh+Printing.pdf",
+        "understanding-machine-learning-theory-algorithms.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "understanding-machine-learning-theory-algorithms.pdf",
+          "page": 36
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q022",
+      "category": "cross_book",
+      "split": "test",
+      "question": "How do the Introduction to Information Retrieval book and Mining of Massive Datasets explain TF-IDF?",
+      "reference_answer": "Both weight a term by its frequency in a document times the log of the inverse fraction of documents containing it. The IR book uses it to score and rank documents for queries in the vector space model, while Mining of Massive Datasets uses TF.IDF to identify the words that characterise a document's topic, normalising term frequency by the most frequent term in the document.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "irbookprint.pdf",
+        "book.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "book.pdf",
+          "page": 36
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 144
+        },
+        {
+          "source_file": "book.pdf",
+          "page": 27
+        },
+        {
+          "source_file": "irbookprint.pdf",
+          "page": 145
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q023",
+      "category": "cross_book",
+      "split": "test",
+      "question": "How do Mathematics for Machine Learning and Linear Algebra Done Right present eigenvalues?",
+      "reference_answer": "Mathematics for Machine Learning presents eigenvalues computationally, for example via the characteristic polynomial, as a tool for matrix decompositions used in machine learning. Linear Algebra Done Right defines eigenvalues for linear operators in a more abstract, proof-based way and develops the theory without relying on determinants.",
+      "expected_behavior": "answer",
+      "expected_books": [
+        "mml-book.pdf",
+        "978-3-031-41026-0.pdf"
+      ],
+      "expected_evidence": [
+        {
+          "source_file": "mml-book.pdf",
+          "page": 141
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 340
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 340
+        },
+        {
+          "source_file": "mml-book.pdf",
+          "page": 118
+        }
+      ],
+      "review_status": "evidence_labelled"
+    },
+    {
+      "id": "Q024",
+      "category": "no_answer",
+      "split": "validation",
+      "question": "Who is the president of Zambia?",
+      "reference_answer": "Not covered by the books; the chatbot should state that the books do not contain enough evidence.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q025",
+      "category": "no_answer",
+      "split": "validation",
+      "question": "What is the latest version of PyTorch?",
+      "reference_answer": "Not covered by the books; the chatbot should state that the books do not contain enough evidence.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q026",
+      "category": "no_answer",
+      "split": "test",
+      "question": "How do I cook nshima?",
+      "reference_answer": "Not covered by the books; the chatbot should state that the books do not contain enough evidence.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q027",
+      "category": "no_answer",
+      "split": "test",
+      "question": "What was the price of copper in 2025?",
+      "reference_answer": "Not covered by the books; the chatbot should state that the books do not contain enough evidence.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q028",
+      "category": "no_answer",
+      "split": "test",
+      "question": "Who won the 2010 FIFA World Cup?",
+      "reference_answer": "Not covered by the books; the chatbot should state that the books do not contain enough evidence.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q029",
+      "category": "citation_check",
+      "split": "validation",
+      "question": "What does Convex Optimization say about PageRank?",
+      "reference_answer": "Convex Optimization does not cover PageRank. The chatbot should say the evidence is insufficient and must not cite Convex Optimization passages as supporting a PageRank explanation.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    },
+    {
+      "id": "Q030",
+      "category": "citation_check",
+      "split": "test",
+      "question": "According to OpenIntro Statistics, how do transformers work?",
+      "reference_answer": "OpenIntro Statistics does not cover transformer neural networks. The chatbot should say the evidence is insufficient and must not cite OpenIntro passages as supporting an explanation of transformers.",
+      "expected_behavior": "abstain",
+      "expected_books": [],
+      "expected_evidence": [],
+      "review_status": "draft"
+    }
+  ]
+}
