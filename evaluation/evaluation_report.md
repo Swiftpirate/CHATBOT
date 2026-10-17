@@ -28,7 +28,7 @@ The system meets the citation-traceability target and never refuses an answerabl
 - **Chunking:** 180 words with 40-word overlap, chunks kept within one page.
 - **Retrieval:** FAISS `IndexFlatIP` (cosine), top 2 passages; 2 per book when a question names books; minimum score 0.35.
 - **Answer review:** each answer was marked yes / partly / no against the reference answer; marks were suggested by an AI assistant and confirmed by the group.
-- **Benchmark:** 30 questions (10 validation, 20 held-out test) across six categories: direct facts, reasoning, numerical, cross-book comparison, no-answer, and citation traps. Expected evidence pages were labelled by the group, assisted by AI-suggested labels that the group reviewed.
+- **Benchmark:** 30 questions (10 validation, 20 held-out test) across six categories: direct facts, reasoning, numerical, cross-book comparison, no-answer, and citation traps. Questions and reference answers were drafted with an AI assistant and still need review by the group and instructor. Expected evidence pages were labelled by the group, assisted by AI-suggested labels that the group reviewed.
 - **Recall@5 note:** measured with plain retrieval, without book filtering. The chatbot filters by named books, so its cross-book retrieval is better than this figure shows.
 - **Runs:** final validation run 2026-10-17 10:36; test run 2026-10-17 10:47, run once after tuning finished.
 

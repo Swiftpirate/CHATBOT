@@ -23,7 +23,7 @@
       "min_score": 0.35,
       "index": "FAISS IndexFlatIP (cosine)"
     },
-    "benchmark": "30 questions: 10 validation, 20 held-out test. 6 categories. Reference answers drafted and reviewed by the group; expected evidence pages labelled by the group with AI-suggested labels that the group reviewed.",
+    "benchmark": "30 questions: 10 validation, 20 held-out test. 6 categories. Questions and reference answers were drafted with an AI assistant and need review by the group and instructor; expected evidence pages were labelled by the group with AI-suggested labels that the group reviewed.",
     "test_run_date": "2026-10-17T10:47:08",
     "final_validation_run_date": "2026-10-17T10:36:48",
     "note_on_recall": "Recall@5 is measured with plain retrieval (no book filtering). The chatbot itself filters by named books, so cross-book retrieval in the app is better than the Recall@5 figure suggests.",
