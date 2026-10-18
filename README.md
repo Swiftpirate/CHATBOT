@@ -194,12 +194,24 @@ The full report, including test conditions, error analysis and limitations, is i
 
 Full metadata, including source URLs, is in `data/book_manifest.json`.
 
+## Documentation and records
+
+| Record | File |
+|---|---|
+| Technical documentation: models and versions, configuration, prompt, embedding and retrieval pipeline, dependencies, limitations | `docs/TECHNICAL_DOCUMENTATION.md` |
+| Book manifest: titles, authors, editions, publishers, source URLs, licensing and processing status | `data/book_manifest.json` |
+| Evaluation dataset: questions, reference answers, evidence pages, splits, review status | `data/evaluation_questions.json` |
+| Evaluation report: metrics, test conditions, error analysis, limitations | `evaluation/evaluation_report.md`, `evaluation/report.json` |
+| Raw evaluation results per run | `evaluation/report_test.json`, `evaluation/report_validation.json` |
+| Answer review marks | `evaluation/answer_review_suggested.csv` |
+| Configuration | `config/config.json` |
+
 ## Team roles
 
 | Member | Role |
 |---|---|
-| YANDE SICHULA | BACKEND DEVELOPER |
-| FILL IN: partner's name | FILL IN |
+| YANDE SICHULA| BACKEND DEVELOPER AND FRONTEND |
+| MAINZA HACHILENSA  | TESTING AND EVALUATION |
 
 ## Copyright and data
 
