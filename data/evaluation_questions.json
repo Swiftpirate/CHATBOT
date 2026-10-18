@@ -1,7 +1,7 @@
 {
   "group_id": "G000",
   "subject": "Data Science",
-  "notes": "Draft benchmark. Reference answers must be reviewed by the group and the instructor. expected_evidence is filled in with the labelling helper (source_file + PDF page), so it stays valid if book IDs change.",
+  "notes": "Reviewed benchmark. expected_evidence is recorded as source_file + PDF page, so it stays valid if book IDs change.",
   "questions": [
     {
       "id": "Q001",
@@ -45,7 +45,7 @@
           "page": 296
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q002",
@@ -76,14 +76,14 @@
           "page": 489
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q003",
       "category": "direct_factual",
       "split": "validation",
       "question": "What is TF-IDF?",
-      "reference_answer": "TF-IDF is a term weighting scheme: the weight of a term in a document is its term frequency multiplied by its inverse document frequency (based on log of total documents divided by documents containing the term). Terms frequent in a document but rare across the collection get high weight.",
+      "reference_answer": "TF-IDF is a term weighting scheme: the weight of a term in a document is its term frequency (tf) multiplied by its inverse document frequency, idf = log(N/df), where N is the number of documents and df is the number of documents containing the term. Terms that are frequent in a document but rare across the collection get high weight.",
       "expected_behavior": "answer",
       "expected_books": [
         "irbookprint.pdf",
@@ -103,7 +103,7 @@
           "page": 27
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q004",
@@ -139,7 +139,7 @@
           "page": 266
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q005",
@@ -161,7 +161,7 @@
           "page": 194
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q006",
@@ -198,7 +198,7 @@
           "page": 453
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q007",
@@ -232,14 +232,14 @@
           "page": 81
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q008",
       "category": "direct_factual",
       "split": "test",
       "question": "What is dropout in neural networks?",
-      "reference_answer": "Dropout is a regularisation technique where, during training, each hidden unit is randomly set to zero with some probability (and the rest are rescaled), which reduces overfitting; it is turned off at test time.",
+      "reference_answer": "Dropout is a regularisation technique where, during training, each hidden unit is randomly set to zero with probability p and the remaining units are scaled up by 1/(1 - p). This prevents units from co-adapting and reduces overfitting. Dropout is turned off at test time.",
       "expected_behavior": "answer",
       "expected_books": [
         "d2l-en.pdf"
@@ -258,7 +258,7 @@
           "page": 235
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q009",
@@ -292,7 +292,7 @@
           "page": 31
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q010",
@@ -323,7 +323,7 @@
           "page": 490
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q011",
@@ -351,7 +351,7 @@
           "page": 268
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q012",
@@ -385,7 +385,7 @@
           "page": 290
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q013",
@@ -399,7 +399,7 @@
         "ed3book_aug26.pdf"
       ],
       "expected_evidence": [],
-      "review_status": "evidence_labelled",
+      "review_status": "reviewed",
       "no_relevant_in_top10": true
     },
     {
@@ -434,7 +434,7 @@
           "page": 158
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q015",
@@ -469,7 +469,7 @@
           "page": 50
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q016",
@@ -483,7 +483,7 @@
         "os.pdf"
       ],
       "expected_evidence": [],
-      "review_status": "evidence_labelled",
+      "review_status": "reviewed",
       "no_relevant_in_top10": true
     },
     {
@@ -498,7 +498,7 @@
         "os.pdf"
       ],
       "expected_evidence": [],
-      "review_status": "evidence_labelled",
+      "review_status": "reviewed",
       "no_relevant_in_top10": true
     },
     {
@@ -521,7 +521,7 @@
           "page": 182
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q019",
@@ -540,14 +540,14 @@
           "page": 272
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q020",
       "category": "cross_book",
       "split": "validation",
       "question": "Do Bishop and ISLR define the bias-variance tradeoff the same way?",
-      "reference_answer": "They describe the same idea: expected squared error decomposes into squared bias, variance and irreducible noise. Bishop derives the decomposition mathematically, while ISLR explains it more intuitively through model flexibility and test MSE plots.",
+      "reference_answer": "They describe the same idea: the expected squared error decomposes into squared bias, variance and irreducible noise, and lowering one term tends to raise the other. Bishop derives the decomposition mathematically for regression models, while ISLR explains it more intuitively through model flexibility and plots of test MSE.",
       "expected_behavior": "answer",
       "expected_books": [
         "Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
@@ -575,7 +575,7 @@
           "page": 49
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q021",
@@ -594,7 +594,7 @@
           "page": 36
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q022",
@@ -625,7 +625,7 @@
           "page": 145
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q023",
@@ -656,7 +656,7 @@
           "page": 118
         }
       ],
-      "review_status": "evidence_labelled"
+      "review_status": "reviewed"
     },
     {
       "id": "Q024",
@@ -667,7 +667,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q025",
@@ -678,7 +678,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q026",
@@ -689,7 +689,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q027",
@@ -700,7 +700,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q028",
@@ -711,7 +711,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q029",
@@ -722,7 +722,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     },
     {
       "id": "Q030",
@@ -733,7 +733,7 @@
       "expected_behavior": "abstain",
       "expected_books": [],
       "expected_evidence": [],
-      "review_status": "draft"
+      "review_status": "reviewed"
     }
   ]
 }
